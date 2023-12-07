@@ -2,4 +2,6 @@
 
 declare(strict_types=1);
 
-echo "HEO";
+echo "httpd?2";
+
+phpinfo();

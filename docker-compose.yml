@@ -7,23 +7,29 @@ services:
       dockerfile: Dockerfile
     container_name: appc
     restart: always
-    working_dir: /var/www/
+    working_dir: /usr/local/apache2/htdocs
     volumes:
-      - ../src:/var/www
-  nginx:
-    image: nginx:1.25
-    container_name: nginxc
+         - ./:/usr/local/apache2/htdocs
+    ports:
+      - "9000:9000"
+  apache:
+    build:
+      context: ./
+      dockerfile: DockerFile.Apache
+    container_name: apachec
     restart: always
     ports:
-      - 8000:80
+    -  8000:80
+    -  433:833
     volumes:
-      - ../src:/var/www
-      - ./nginx:/etc/nginx/conf.d
+      - ./:/usr/local/apache2/htdocs
+    links:
+    - app
   db:
     container_name: mysqlc
     image: mysql:8.0
     volumes:
-      - ./storage/mysql:/var/lib/mysql
+      - ./database/mysql:/var/lib/mysql
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: root
