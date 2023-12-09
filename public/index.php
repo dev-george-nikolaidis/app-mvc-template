@@ -2,4 +2,7 @@
 
 declare(strict_types=1);
 
-echo "httpd? PUBLIC";
+
+echo "<pre>";
+var_dump($_SERVER);
+echo "</pre>";

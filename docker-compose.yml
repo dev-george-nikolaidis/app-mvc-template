@@ -1,31 +1,22 @@
 version: '3.8'
 
 services:
-  app:
-    build:
-      context: ./
-      dockerfile: Dockerfile
-    container_name: appc
-    restart: always
-    working_dir: /usr/local/apache2/htdocs
-    volumes:
-         - ./:/usr/local/apache2/htdocs
+ php:
+    container_name: phpc
+    build: ./docker/php
     ports:
       - "9000:9000"
-  apache:
-    build:
-      context: ./
-      dockerfile: DockerFile.Apache
-    container_name: apachec
-    restart: always
-    ports:
-    -  8000:80
-    -  433:833
     volumes:
-      - ./:/usr/local/apache2/htdocs
-    links:
-    - app
-  db:
+      - ./public:/usr/local/apache2/htdocs
+    working_dir: /usr/local/apache2/htdocs
+ apache:
+      container_name: apachec
+      build: ./docker/apache
+      ports:
+        - "8000:80"
+      volumes:
+        - ./:/usr/local/apache2/htdocs
+ db:
     container_name: mysqlc
     image: mysql:8.0
     volumes:
@@ -33,7 +24,7 @@ services:
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: root
-      # MYSQL_DATABASE: myDb
+      # MYSQL_DATABASE: test
       # MYSQL_USER: user
       # MYSQL_PASSWORD: test
       # 3308 is my port of my pick , 3306 is the default listen container port
