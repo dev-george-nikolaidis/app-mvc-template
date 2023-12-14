@@ -7,7 +7,7 @@ services:
     ports:
       - "9000:9000"
     volumes:
-      - ./public:/usr/local/apache2/htdocs
+      - ./:/usr/local/apache2/htdocs
     working_dir: /usr/local/apache2/htdocs
  apache:
       container_name: apachec
@@ -16,17 +16,31 @@ services:
         - "8000:80"
       volumes:
         - ./:/usr/local/apache2/htdocs
- db:
+
+ mysql:
     container_name: mysqlc
     image: mysql:8.0
     volumes:
       - ./database/mysql:/var/lib/mysql
     restart: always
     environment:
-      MYSQL_ROOT_PASSWORD: root
-      # MYSQL_DATABASE: test
-      # MYSQL_USER: user
-      # MYSQL_PASSWORD: test
-      # 3308 is my port of my pick , 3306 is the default listen container port
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+      MYSQL_DATABASE: ${DB_NAME}
+      MYSQL_USER: ${DB_USERNAME}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
     ports:
-      - 3308:3306
+    - "3310:3306"
+    depends_on:
+     - apache
+ phpmyadmin:
+      image: phpmyadmin/phpmyadmin
+      container_name: pma
+      links:
+        - mysql
+      environment:
+        PMA_HOST: mysql
+        PMA_PORT: 3306
+        PMA_ARBITRARY: 1
+      restart: always
+      ports:
+        - 8085:80
