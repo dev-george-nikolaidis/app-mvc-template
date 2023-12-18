@@ -1,6 +1,4 @@
-# DirectoryIndex index.php
-# RewriteEngine On
-# RewriteRule ^/?$ public/ [L]
-# RewriteCond %{REQUEST_FILENAME} !-f
-# RewriteCond %{REQUEST_FILENAME} !-d
-# RewriteRule ^(.+)$ public/?path=$1 [L,QSA]
+RewriteEngine on
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)$ /index.php?path=$1 [NC,L,QSA]
