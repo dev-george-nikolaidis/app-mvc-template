@@ -2,32 +2,37 @@
 
 declare(strict_types=1);
 
-namespace Src\config;
+namespace src\config;
 
 class Config
 {
     private static $config = [];
 
 
-    private static $dynamicVariables = [
-        'DB_HOST',
-        'DB_USERNAME',
-        'DB_PASSWORD',
-        'DB_PORT',
-        'DB_NAME',
-        "APP_NAME"
-    ];
+    // private static $dynamicVariables = [];
+
+    public static function readEnv($filePath = '.env')
+    {
+        // Load the contents of the .env file
+        $envData = parse_ini_file($filePath);
 
 
+        // Debugger::dump(array_keys($envData));
+        // Return the array with keys and values
+        return  array_keys($envData);
+    }
 
     public static function loadConfigValues(): void
     {
 
-        foreach (self::$dynamicVariables as $value) {
+        $dynamicVariables =  self::readEnv();
+
+
+        foreach ($dynamicVariables as $value) {
             self::$config[$value] = $_ENV[$value];
         }
 
-        self::checkRequiredVariables(self::$dynamicVariables);
+        self::checkRequiredVariables($dynamicVariables);
 
     }
 
@@ -45,4 +50,5 @@ class Config
             }
         }
     }
+
 }

@@ -26,5 +26,12 @@ class Debugger
         var_dump($var);
         echo "</pre>";
     }
+    public static function dd(mixed $var)
+    {
+        echo "<pre>";
+        var_dump($var);
+        echo "</pre>";
+        die();
+    }
 
 }
