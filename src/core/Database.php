@@ -11,7 +11,7 @@ class Database
     private \PDO  $connection;
     private $stmt;
     private $error;
-    private static Database $instance;
+    private static ?Database $instance = null;
 
 
     public function __construct()
@@ -22,12 +22,11 @@ class Database
         // $port = Config::get("DB_PORT");
         $dbname = Config::get("DB_NAME");
 
-
         // Create a new PDO connection.
         try {
             $this->connection  = new \PDO("mysql:host=$host;dbname=$dbname", $username, $password);
             $this->connection->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
-            // echo "Connection has been made";
+            echo "Connection has been made";
         } catch (\PDOException $e) {
             // Handle connection errors.
             throw new \RuntimeException("Connection failed: " . $e->getMessage());
